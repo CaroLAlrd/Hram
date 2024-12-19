@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Molis</title>
+    <style>
+        body, html {
+            margin: 0;
+            height: 100%;
+            background: url('https://i.ibb.co/st3nvhV/Church.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        #candle-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .candle {
+            position: absolute;
+            width: 240px;
+            height: 300px;
+            cursor: pointer;
+            transition: filter 0.3s ease;
+   
+        }
+
+        .target, .target2 {
+            position: absolute;
+            width: 100px;
+            height: 150px;
+        }
+
+        .target {
+            top: 77%;
+            left: 52%;
+            transform: translate(-50%, -50%);
+        }
+
+        .target2 {
+            top: 77%;
+            left: 74%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="candle-container">
+        <img src="https://i.ibb.co/BNvSKWV/Candle.png" alt="Candle" class="candle" id="candle1" draggable="true" style="top: 10%; left: 0%;">
+        <img src="https://i.ibb.co/BNvSKWV/Candle.png" alt="Candle" class="candle" id="candle2" draggable="true" style="top: 50%; left: 0%;">
+        <div class="target"></div>
+        <div class="target2"></div>
+    </div>
+
+    <script>
+        let draggedElement = null;
+
+        // Начало перетаскивания
+        document.addEventListener('dragstart', function(event) {
+            draggedElement = event.target;
+        });
+
+        // Обработка перемещения
+        document.addEventListener('dragover', function(event) {
+            event.preventDefault();
+            if (draggedElement) {
+                draggedElement.style.left = event.clientX - draggedElement.offsetWidth / 2 + 'px';
+                draggedElement.style.top = event.clientY - draggedElement.offsetHeight / 2 + 'px';
+            }
+        });
+
+        // Обработка окончания перемещения
+        document.addEventListener('drop', function(event) {
+            event.preventDefault();
+            if (event.target.classList.contains('target') || event.target.classList.contains('target2')) {
+                draggedElement.classList.add('lit');
+                draggedElement.src = "https://i.ibb.co/ZdBf6Wn/Candle-2.png"; // Зажжённая свеча
+            }
+        });
+
+        // Поддержка для сенсорных устройств
+        document.querySelectorAll('.candle').forEach(candle => {
+            candle.addEventListener('touchstart', function(event) {
+                draggedElement = event.target;
+            });
+
+            candle.addEventListener('touchmove', function(event) {
+                const touch = event.touches[0];
+                draggedElement.style.left = touch.clientX - draggedElement.offsetWidth / 2 + 'px';
+                draggedElement.style.top = touch.clientY - draggedElement.offsetHeight / 2 + 'px';
+            });
+
+            candle.addEventListener('touchend', function(event) {
+                if (event.target.classList.contains('target') || event.target.classList.contains('target2')) {
+                    draggedElement.classList.add('lit');
+                    draggedElement.src = "https://i.ibb.co/ftVfHk6/image.png"; // Зажжённая свеча
+                }
+            });
+        });
+    </script>
+</body>
+</html>
